@@ -1,17 +1,25 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import Layout from "./components/comonComponents/Layout";
-import { ThemeProvider } from "./context/Theme-Provider";
-import AppRoutes from "./router/AppRoutes";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Login from "./auth/Login";
+import ErrorBoundary from "./ErrorBoundary";
 import Master from "./router/Master";
 
 const App = () => {
   return (
-    <ThemeProvider defaultTheme="dark">
+   // <ErrorBoundary>
+   //  <ThemeProvider defaultTheme="dark">
       
-        <Master/>
+   //      <Master/>
       
-    </ThemeProvider>
+   //  </ThemeProvider>
+   //  </ErrorBoundary> 
+   <ErrorBoundary>
+          <Router hashType="noslash">
+            <Routes>
+              <Route exact path="/" element={<Login />} />
+              <Route path="/*" element={<Master />} />
+            </Routes>
+          </Router>
+        </ErrorBoundary>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -12,7 +12,7 @@ const Login = () => {
     // Replace with actual authentication logic
     if (email&& password) {
       setIsAuthenticated(true);
-      navigate('/dashboard');
+      navigate('itc-smart/dashboard');
     } else {
       alert('Invalid credentials');
     }

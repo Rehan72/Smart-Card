@@ -1,21 +1,19 @@
-import { useTheme } from "../../context/Theme-Provider";
 import { motion } from "framer-motion";
 import {
-  Activity,
-  Briefcase,
-  ChevronLeft,
-  ChevronRight,
-  Clipboard,
-  Home,
-  Info,
-  LayoutDashboard,
-  Phone,
-  Users,
-  ArrowLeft,
-  ArrowRight,
+   Activity,
+   ArrowLeft,
+   Briefcase,
+   Clipboard,
+   Home,
+   Info,
+   LayoutDashboard,
+   Phone,
+   Users
 } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useTheme } from "../../context/Theme-Provider";
+import { preText } from "../../utils/Constant";
 
 const Navbar = () => {
     const { theme } = useTheme();
@@ -51,9 +49,9 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { name: "Dashboard", path: "dashboard", icon: LayoutDashboard },
-    { name: "User", path: "/user", icon: Users },
-    { name: "Home", path: "home", icon: Home },
+    { name: "Dashboard", path: `${preText}dashboard`, icon: LayoutDashboard },
+    { name: "User", path: `${preText}user`, icon: Users },
+    { name: "Home", path:`${preText}home`, icon: Home },
     { name: "Activity", path: "/alter", icon: Activity },
     { name: "About", path: "/about", icon: Info },
     { name: "Services", path: "/services", icon: Briefcase },

@@ -1,65 +1,29 @@
-import {
-    createBrowserRouter,
-    Navigate,
-    RouterProvider
- } from "react-router-dom";
- import Login from "../auth/Login";
- import Layout from "../components/comonComponents/Layout";
- import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
+import RouteConstant from "./RouteConstant";
 
- import Dashboard from "../pages/Dashboard";
- import ErrorBoundary from "../pages/ErrorBoundary";
- import Home from "../pages/Home";
-
- 
- const Master = () => {
-   //const { isAuthenticated } = useAuth();
-   const isAuthenticated = true; // Replace with your authentication logic
- 
+export default function Master() {
+   console.log(RouteConstant,"RouteConstant");
    
-   useEffect(() => {
-     // if (isAuthenticated) {
-     //    console.log(isAuthenticated,"Is");
-     //   navigate("/dashboard"); // Navigate to dashboard if authenticated
-     // }
-   }, [isAuthenticated]);
- 
-   const router = createBrowserRouter([
-     {
-       path: "/",
-       element: <Login />,
-     },
-     
-     {
-       path: "/",
-       element: isAuthenticated ? <Layout /> : <Login />,
-       children: [
-         {
-           path: "dashboard",
-           element: <Dashboard />,
-         },
-         
-           {
-             path: "/home",
-             element: <Home />,
-           },
-          
-          
-         {
-           path: "*",
-           element: <ErrorBoundary />,
-         },
-       ],
-     },
-   ]);
- 
- 
-   return <RouterProvider router={router} />;
- 
- 
- };
- 
- export default Master;
- 
- 
- 
+  return (
+    <Routes>
+      {RouteConstant.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          exact={route.exact}
+          element={
+            <ProtectedRoute>
+              <route.element />
+            </ProtectedRoute>
+          }
+        />
+      ))}
+      {/* Fallback for undefined routes */}
+      <Route
+        path="*"
+        element={<h1 className="text-center text-warning mt-4">404: Not Found</h1>}
+      />
+    </Routes>
+  );
+}
