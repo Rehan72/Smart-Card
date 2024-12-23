@@ -2,8 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import RouteConstant from "./RouteConstant";
 
-export default function Master() {
-   console.log(RouteConstant,"RouteConstant");
+export default function Master() {  
    
   return (
     <Routes>

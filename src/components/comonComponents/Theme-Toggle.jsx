@@ -2,12 +2,18 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../../context/Theme-Provider";
 
 export default function ThemeToggle() {
+  
+   
+
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
-
+  
+  const handleThemeToggle = () => {
+    setTheme(isDark ? "light" : "dark");
+  };
   return (
     <div
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={() => handleThemeToggle()}
       className={`flex items-center cursor-pointer transition-transform duration-500 ${
         isDark ? "rotate-180" : "rotate-0"
       }`}
