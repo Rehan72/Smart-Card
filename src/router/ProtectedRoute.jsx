@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import Layout from "../components/comonComponents/Layout";
+import Layout from "../components/commonComponents/Layout";
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = true; // Replace with your authentication logic

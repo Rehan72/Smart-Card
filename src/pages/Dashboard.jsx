@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import TopWidgetCard from '../components/comonComponents/TopWidgetCard';
+import TopWidgetCard from '../components/commonComponents/TopWidgetCard';
 
 function Dashboard() {
 
@@ -49,11 +49,17 @@ function Dashboard() {
   return (
 
   <>
-    <div>
+
       <TopWidgetCard  data={data} onCardSelect={handleCardSelect} />
+    
 
 
-      <Suspense fallback={<div>Loading...</div>}>
+   <section className="mt-6">
+        <form className="space-y-8">
+          <div className="p-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-lg shadow">
+            <h3 className="text-lg font-semibold">Form Section</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+            <Suspense fallback={<div>Loading...</div>}>
         {selectedCardDetails && (
           <div className="selected-card-details mt-4 transition-opacity duration-500 ease-in-out opacity-100">
             <h2>Selected Card Details</h2>
@@ -63,28 +69,11 @@ function Dashboard() {
           </div>
         )}
       </Suspense>
-   </div>
-   <section>
-   <form  className="space-y-8">
-          <div className="p-2 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text">
-            <div className="flex items-center justify-between">
-               
             </div>
-          </div>  
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Suspense fallback={<div>Loading...</div>}>
-        {selectedCardDetails && (
-          <div className="selected-card-details mt-4 transition-opacity duration-500 ease-in-out opacity-100">
-            <h2>Selected Card Details</h2>
-            <p><strong>Title:</strong> {selectedCardDetails.title}</p>
-            <p><strong>Value:</strong> {selectedCardDetails.value}</p>
-            <p><strong>Description:</strong> {selectedCardDetails.description}</p>
           </div>
-        )}
-      </Suspense>
-          </div>
-    </form>        
-   </section>
+        </form>
+      </section>
+   
   </>
   
   )

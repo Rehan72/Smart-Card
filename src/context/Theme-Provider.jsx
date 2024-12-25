@@ -16,7 +16,7 @@ export function ThemeProvider({
   const [theme, setTheme] = useState(
     () => localStorage.getItem(storageKey) || defaultTheme
   );
-  console.log(theme,"theme");
+  
   
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function ThemeProvider({
     </ThemeProviderContext.Provider>
   );
 }
-console.log(ThemeProviderContext,"ThemeProviderContext");
+
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);

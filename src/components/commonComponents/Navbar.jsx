@@ -14,7 +14,7 @@ import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/Theme-Provider";
 import { preText } from "../../utils/Constant";
-
+import Tooltip from "./Tooltip";
 const Navbar = () => {
     const { theme } = useTheme();
   const location = useLocation();
@@ -74,9 +74,15 @@ const Navbar = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
+        <Tooltip content={isOpen ? 'Collapse' : 'Expand'} animation="scale" duration={200} theme={theme}
+        arrow={false} placement={'right'}
+        className="bg-gray-500 text-white px-2 py-1 rounded-md shadow-lg z-50"
+      // className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-xl font-semibold text-lg transition-all transform hover:scale-105"
+        >
           <button
             className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full shadow-md hover:bg-gray-200 transition-all"
             onClick={toggleDropdown}
+            //title={isOpen ? 'Collapse' : 'Expand'}
           >
             <motion.div
               animate={{ rotate: isOpen ? 0 : 180 }}
@@ -85,6 +91,7 @@ const Navbar = () => {
                <ArrowLeft size={20} color='#000000' />
             </motion.div>
           </button>
+          </Tooltip>
         </motion.div>
 
         {/* Navigation */}
