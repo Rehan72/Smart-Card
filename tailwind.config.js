@@ -4,6 +4,9 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+      backgroundImage: {
+         'app-background': "url('/src/assets/ITC-Background-image.svg')",
+       },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -11,6 +14,8 @@ module.exports = {
   		},
   		colors: {
   			background: 'hsl(var(--background))',
+         navbarBackground: 'hsl(var(--navbar-background))',
+         activeNavbarBackground: 'hsl(var(--active-navbar-background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',

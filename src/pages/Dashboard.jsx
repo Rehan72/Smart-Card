@@ -1,82 +1,377 @@
-import { Suspense, useState } from 'react';
-import TopWidgetCard from '../components/commonComponents/TopWidgetCard';
-
+import { Edit, Trash } from "lucide-react";
+import { lazy, Suspense, useState } from "react";
+import { Link } from "react-router-dom";
+import { InputField } from "../components/commonComponents/InputField";
+import { SelectField } from "../components/commonComponents/SelectField";
+// import TopWidgetCard from "../components/commonComponents/TopWidgetCard";
+import AddNewAddress from "../components/commonComponents/AddNewAddress";
+import { Card, CardContent } from "../components/ui/card";
+import { Checkbox } from "../components/ui/checkbox";
+import { Label } from "../components/ui/label";
+import UserCardSkeleton from "../skeleton/UserCardSkeleton";
+const TopWidgetCard = lazy(() => import('../components/commonComponents/TopWidgetCard'))
 function Dashboard() {
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectCity] = useState("");
+  const [selectNewAddress,setSelectNewAddress]=useState('')
+  const [selectedCardDetails, setSelectedCardDetails] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // Function to handle card selection
+  const handleCardSelect = (card) => {
+    setSelectedCardDetails(card); // Update the selected card details
+  };
 
-   const [selectedCardDetails, setSelectedCardDetails] = useState(null);
+  const [cards, setCards] = useState([
+    { id: 1, selectedState: "", selectedCity: "" },
+    { id: 2, selectedState: "", selectedCity: "" },
+  ]);
+  const user = {
+    name: "John Doe",
+    image: "https://via.placeholder.com/150",
+    bio: "Software Engineer with 5 years of experience in web development.",
+    skills: ["React", "JavaScript", "CSS"],
+  };
 
-   // Function to handle card selection
-   const handleCardSelect = (card) => {
+  const data = [
+    { title: "Card 1", value: "100", icon: "/path/to/icon1.png" },
+    { title: "Card 2", value: "200", icon: "/path/to/icon2.png" },
+    { title: "Card 3", value: "300", icon: "/path/to/icon3.png" },
+    { title: "Card 4", value: "100", icon: "/path/to/icon1.png" },
+    { title: "Card 5", value: "200", icon: "/path/to/icon2.png" },
+    { title: "Card 6", value: "300", icon: "/path/to/icon3.png" },
+    { title: "Card 7", value: "100", icon: "/path/to/icon1.png" },
+    { title: "Card 8", value: "200", icon: "/path/to/icon2.png" },
+
+  ];
+
+  const stateData = [
+    { value: "California", label: "California" },
+    { value: "Texas", label: "Texas" },
+    { value: "Florida", label: "Florida" },
+    { value: "New York", label: "New York" },
+    { value: "Illinois", label: "Illinois" },
   
-     setSelectedCardDetails(card);  // Update the selected card details
-   };
-   const user = {
-      name: 'John Doe',
-      image: 'https://via.placeholder.com/150',
-      bio: 'Software Engineer with 5 years of experience in web development.',
-      skills: ['React', 'JavaScript', 'CSS']
-    };
+  ];
+  const cityData = [
+    { value: "Los Angeles", label: "Los Angeles" },
+    { value: "San Francisco", label: "San Francisco" },
+    { value: "San Diego", label: "San Diego" },
+    { value: "Sacramento", label: "Sacramento" },
+    { value: "Fresno", label: "Fresno" },
+  
+  ];
+  // Handler to update the selected state
+  const handleSelectChange = (field, value) => {
+    console.log("Selected State:", value);
+    if (field === "selectedState") {
+      setSelectedState(value); // Update the selected state
+    }
+  };
 
-    const data = [
-      { title: 'Card 1', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 2', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 3', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 4', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 5', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 6', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 7', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 8', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 0', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 10', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 11', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 12', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 13', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 14', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 15', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 16', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 17', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 18', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 19', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 20', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 21', value: '300', icon: '/path/to/icon3.png' },
-      { title: 'Card 22', value: '100', icon: '/path/to/icon1.png' },
-      { title: 'Card 23', value: '200', icon: '/path/to/icon2.png' },
-      { title: 'Card 24', value: '300', icon: '/path/to/icon3.png' },
-    ];
+  const handleSelectCity = (field, value) => {
+    setSelectCity(value);
+  };
 
-   
-    
+  const handleChangeAddress=()=>{
+console.log("Hi");
+setSelectNewAddress(true)
+setIsDialogOpen(true)
+
+  }
+  const handleLocationChange = (newLocation) => {
+  // setLocation(newLocation);
+   console.log("Updated Location:", newLocation);
+   // Handle updated location in state or API calls
+ };
+ 
   return (
-
-  <>
-
-      <TopWidgetCard  data={data} onCardSelect={handleCardSelect} />
-    
-
-
-   <section className="mt-6">
-        <form className="space-y-8">
-          <div className="p-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-lg shadow">
-            <h3 className="text-lg font-semibold">Form Section</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
-            <Suspense fallback={<div>Loading...</div>}>
-        {selectedCardDetails && (
-          <div className="selected-card-details mt-4 transition-opacity duration-500 ease-in-out opacity-100">
-            <h2>Selected Card Details</h2>
-            <p><strong>Title:</strong> {selectedCardDetails.title}</p>
-            <p><strong>Value:</strong> {selectedCardDetails.value}</p>
-            <p><strong>Description:</strong> {selectedCardDetails.description}</p>
-          </div>
-        )}
+    <>
+      <div className="ml-4 mr-4">
+      <Suspense fallback={<TopWidgetCard/>}>
+      <TopWidgetCard data={data} onCardSelect={handleCardSelect} />
       </Suspense>
-            </div>
+        
+      </div>
+
+      <section className="mt-6">
+        <h1 className="text-black text-xl font-semibold mb-2">CARD DETAILS</h1>
+
+        <Suspense fallback={<UserCardSkeleton/>}>
+          <div className="">
+            {/* First Card */}
+            <Card className="w-full shadow-md rounded-lg border">
+              <p className="ml-4 mt-2 text-1xl mb-4">User Name</p>
+              <CardContent className="mt-4 flex">
+                {/* Profile Image */}
+
+                <img
+                  src={user.image}
+                  alt="icon"
+                  className="w-50 h-50 p-4 mt-2 rounded-lg  border-2 border-black mr-4"
+                />
+
+                {/* ITS ID and Name */}
+                <form className="grid grid-cols-3 gap-4 w-full">
+                  {/* Name Field */}
+                  <div className="relative col-span-2">
+                    <InputField
+                      id="name"
+                      type="text"
+                      label="Name"
+                      placeholder=" "
+                      required
+                      //className="peer w-full border-0 border-b-2 border-black bg-transparent px-0 py-3 text-black focus:border-black focus:outline-none focus:ring-0"
+                    />
+                  </div>
+
+                  {/* ITS ID Field */}
+                  <div className="relative col-span-1">
+                    <InputField
+                      id="its-id"
+                      type="text"
+                      label="ITS-ID"
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+
+                  {/* Jamiat Name Field */}
+                  <div className="relative col-span-1">
+                    <InputField
+                      id="jamiatName"
+                      type="text"
+                      label="Jamiat Name"
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+
+                  {/* Jamaat Name Field */}
+                  <div className="relative col-span-1">
+                    <InputField
+                      id="jamaatName"
+                      type="text"
+                      label={"Jamaat Name"}
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+
+                  {/* Age Field */}
+                  <div className="relative col-span-1">
+                    <InputField
+                      id="age"
+                      type="text"
+                      label={"Age"}
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+
+                  {/* Mobile No Field */}
+                  <div className="relative col-span-1 mb-6">
+                    <InputField
+                      id="mobileNo"
+                      type="text"
+                      label={"Mobile No"}
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+                </form>
+              </CardContent>
+             
+            </Card>
+
+            {/* Second Card */}
+            <Card className="w-full shadow-md rounded-lg border mt-6">
+              <h1 className="text-black text-xl font-semibold mb-2 mt-4 ml-4">
+                Permanent Address
+              </h1>
+              <CardContent>
+                <form className="grid grid-cols-3 gap-4 w-full">
+                  {/* Address Line 1 Field */}
+                  <div className="relative col-span-3">
+                    <InputField
+                      id="addressLine1"
+                      name="addressLine1"
+                      type="text"
+                      label={"Address Line 1"}
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+
+                  {/* Address Line 2 Field */}
+                  <div className="relative col-span-3">
+                    <InputField
+                      id="addressLine2"
+                      name="addressLine2"
+                      type="text"
+                      label={"Address Line 2"}
+                      placeholder=" "
+                      required={true} 
+                    />
+                  </div>
+
+                  {/* City Field */}
+                  <div className="relative col-span-1">
+                    <SelectField
+                      id="city"
+                      name="city"
+                      label="Select State"
+                      value={selectedCity} // Controlled value
+                      onChange={(e) =>
+                        handleSelectCity("selectedCity", e.target.value)
+                      } // On change handler
+                      options={cityData} // Options to populate the select field
+                      required={true}
+                    />
+                  </div>
+
+                  {/* State Field */}
+                  <div className="relative col-span-1">
+                    <SelectField
+                      id="state"
+                      name="state"
+                      label="Select State"
+                      value={selectedState} // Controlled value
+                      onChange={(e) =>
+                        handleSelectChange("selectedState", e.target.value)
+                      } // On change handler
+                      options={stateData} // Options to populate the select field
+                      required={true} // If required
+                    />
+                  </div>
+
+                  {/* Postal Code Field */}
+                  <div className="relative col-span-1">
+                    <InputField
+                      id="postalCode"
+                      name="postalCode"
+                      type="text"
+                      label={"Postal Code"}
+                      placeholder=" "
+                      required={true}
+                    />
+                  </div>
+                  {/* Checkbox for Permanent Address */}
+                  <div className="relative col-span-1 mt-4">
+                    <Checkbox id="sameAsBilling" className="peer">
+                      <span>Permanent address is same as billing address</span>
+                      <Label
+                        htmlFor="sameAsBilling"
+                        className="text-sm text-black"
+                      ></Label>
+                    </Checkbox>
+                  </div>
+                  <div className="relative col-span-1 mt-4">
+                    <Link>
+                      <span className="text-sm text-black">
+                        Hand Delivery From ITS Office
+                      </span>
+                    </Link>
+                  </div>
+                  <div className="relative col-span-1 mb-6 mt-4">
+                    <div onClick={handleChangeAddress}>
+                      <span  className="text-sm text-red-600 cursor-pointer">
+                        Add New Address For Delivery
+                      </span>
+                      </div>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+            <Card className="w-full shadow-md rounded-lg border mt-6">
+              <div className="flex justify-between items-center p-4">
+                <h2 className="text-black text-xl font-semibold">
+                  Delivery Details
+                </h2>
+                <div className="flex space-x-4">
+                  <Edit className="cursor-pointer text-blue-500" size={20} />
+                  <Trash className="cursor-pointer text-red-500" size={20} />
+                </div>
+              </div>
+              <CardContent>
+                <form className="grid grid-cols-3 gap-4 w-full">
+                  {/* Address Line 1 Field */}
+                  <div className="relative col-span-3">
+                    <InputField
+                      id="addressLine1"
+                      name="addressLine1"
+                      type="text"
+                      label={"Address Line 1"}
+                      placeholder=" "
+                      required={true}
+                      tabIndex={1}
+                    />
+                  </div>
+
+                  {/* Address Line 2 Field */}
+                  <div className="relative col-span-3">
+                    <InputField
+                      id="addressLine2"
+                      name="addressLine2"
+                      type="text"
+                      label={"Address Line 2"}
+                      placeholder=" "
+                      required={true}
+                      tabIndex={2}
+                    />
+                  </div>
+
+                  {/* City Field */}
+                  <SelectField
+                    id="city"
+                    name="city"
+                    label="Select State"
+                    value={selectedCity} // Controlled value
+                    onChange={(e) =>
+                      handleSelectCity("selectedCity", e.target.value)
+                    } // On change handler
+                    options={cityData} // Options to populate the select field
+                    required={true} // If required
+                  />
+                 
+
+                  {/* State Field */}
+
+                  <SelectField
+                    id="state"
+                    name="state"
+                    label="Select State"
+                    value={selectedState} // Controlled value
+                    onChange={(e) =>
+                      handleSelectChange("selectedState", e.target.value)
+                    } // On change handler
+                    options={stateData} // Options to populate the select field
+                    required={true} // If required
+                  />
+                  
+
+                  <div className="relative col-span-1 mb-6">
+                    <InputField
+                      id="postalCode"
+                      name="postalCode"
+                      type="text"
+                      label={"Postal Code"}
+                      placeholder=" "
+                      required
+                    />
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
           </div>
-        </form>
+        </Suspense>
       </section>
-   
-  </>
-  
-  )
+      {
+         isDialogOpen? <AddNewAddress  onLocationChange={handleLocationChange}
+          showDialog={isDialogOpen}
+          setShowDialog={setIsDialogOpen}/>:""
+      }
+    </>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

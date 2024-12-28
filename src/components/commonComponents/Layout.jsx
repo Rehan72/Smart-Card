@@ -4,11 +4,11 @@ import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
   return (
-    <div className="bg-gradient-to-br from-background to-muted">
+    <div className="bg-gradient-to-br to-muted">
       <Header />
       <div className="flex">
         <Navbar />
-        <main className="min-h-screen container mx-auto px-4 py-8">
+        <main className="min-h-screen container mx-auto px-4 py-8 ">
         {children}
         </main>
       </div>

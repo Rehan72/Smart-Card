@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel';
 
-const TopWidgetCard = ({ data, itemsPerPage = 5, onCardSelect }) => {
+const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -21,14 +21,12 @@ const TopWidgetCard = ({ data, itemsPerPage = 5, onCardSelect }) => {
   const handleCardClick = (item) => {
     setSelectedCard(item);
     onCardSelect?.(item);
-    console.log(item,"item");
-    
   };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0 },
-    hover: { scale: 1.03 },
+    hover: { scale: 1.05 },
   };
 
   return (
@@ -42,24 +40,32 @@ const TopWidgetCard = ({ data, itemsPerPage = 5, onCardSelect }) => {
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              className={`md:basis-1/4 lg:basis-1/5 w-full pl-2 md:pl-4 ${
-                selectedCard === item ? 'bg-blue-500 border border-blue-500' : ''
-              }`}
+              className={`md:basis-1/3 lg:basis-1/4 w-full pl-2 md:pl-4`}
             >
               <CarouselItem>
-                <div className="p-1">
+                <div className="p-2">
                   <Card
                     onClick={() => handleCardClick(item)}
                     tabIndex={0}
-                    className={`cursor-pointer shadow-lg rounded-lg transition-transform ${
-                      selectedCard === item ? 'ring-2 ring-blue-500' : ''
+                    className={`cursor-pointer shadow-lg rounded-lg border ${
+                      selectedCard === item ? 'ring-2 ring-blue-500' : 'border-gray-200'
                     }`}
                     aria-selected={selectedCard === item}
                   >
-                    <CardContent className="flex items-center justify-center p-6 h-40">
-                      <span className="text-2xl font-semibold">{item.title || `Item ${index + 1}`}</span>
-                      {item.value && <span className="text-xl">{item.value}</span>}
-                      {item.icon && <img src={item.icon} alt="icon" className="icon" />}
+                    <CardContent className="flex items-center p-4 h-40">
+                      {/* Profile Image */}
+                      {/* <img
+                        src={item.image || '/default-avatar.png'}
+                        alt="profile"
+                        className="w-20 h-20 rounded-sm  border-2 border-black mr-4"
+                      /> */}
+                      {item.icon && <img src={item.icon} alt="icon" className="w-20 h-20 rounded-lg  border-2 border-black mr-4" />}
+                      {/* ITS ID and Name */}
+                      <div>
+                        <p className="text-sm font-bold text-gray-700">ITS ID</p>
+                        <p className="text-base font-medium text-gray-900">{item.title}</p>
+                        <p className="text-base font-medium text-gray-900">{item.name || 'Name'}</p>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>

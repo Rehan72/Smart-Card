@@ -27,7 +27,7 @@ const Navbar = () => {
   // Sidebar animation
   const sidebarVariants = {
     open: {
-      width: "14rem", // Expanded width
+      width: "16rem", // Expanded width
       transition: { type: "spring", stiffness: 70, damping: 10 },
     },
     closed: {
@@ -61,7 +61,7 @@ const Navbar = () => {
 
   return (
     <motion.aside
-      className="min-h-screen bg-background border-r border-border"
+      className="min-h-screen bg-navbarBackground border-r border-border"
       variants={sidebarVariants}
       initial="open"
       animate={isOpen ? "open" : "closed"}
@@ -108,7 +108,7 @@ const Navbar = () => {
                   to={item.path}
                   className={({ isActive }) =>
                     location.pathname.startsWith(item.path)
-                      ? "flex items-center space-x-3 bg-gray-400 text-white rounded-md p-2 transition-all duration-300 dark:bg-gray-600"
+                      ? "flex items-center space-x-3 bg-activeNavbarBackground text-white rounded-md p-2 transition-all duration-300 dark:bg-gray-600"
                       : "flex items-center space-x-3 text-foreground hover:bg-muted hover:text-primary rounded-md p-2 transition-all duration-300"
                   }
                 >

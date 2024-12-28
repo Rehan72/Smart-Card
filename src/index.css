@@ -16,7 +16,7 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;
-    --card: 0 0% 100%;
+    --card: 32 100.0% 97.5%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 14.3% 4.1%;
@@ -39,11 +39,13 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --navbar-background: 189 40.6% 41.6%;
+    --active-navbar-background: 189 100.0% 24.3%;
   }
   .dark {
     --background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;
-    --card: 20 14.3% 4.1%;
+    --card: 215 13.8% 34.1%;
     --card-foreground: 60 9.1% 97.8%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;
@@ -65,6 +67,8 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --navbar-background: 20 14.3% 4.1%;
+    --active-navbar-background: 189 100.0% 24.3%;
   }
 }
 @layer base {
@@ -120,4 +124,28 @@
    z-index: 50;
    max-height: calc(100vh - 64px); /* Adjust based on header height */
    overflow: hidden;
+ }
+
+
+ @keyframes shimmer {
+   0% {
+     background-position: -1000px 0;
+   }
+   100% {
+     background-position: 1000px 0;
+   }
+ }
+ 
+ .skeleton {
+   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+   background-size: 200% 100%;
+   animation: shimmer 1.5s infinite;
+ }
+
+
+ @media (max-width: 1900px) {
+   .scrollable-container {
+     max-height: 80vh; /* Adjust to your needs */
+     overflow-y: auto; /* Allows scrolling */
+   }
  }

@@ -1,6 +1,6 @@
-import Home from "../pages/Home";
+import Login from "../auth/LoginForm";
 import Dashboard from "../pages/Dashboard";
-import Login from "../auth/Login";
+import Home from "../pages/Home";
 
 const RouterList = [
   { path: "dashboard", element: <Dashboard /> },
