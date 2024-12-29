@@ -1,13 +1,25 @@
 import { motion } from 'framer-motion';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel';
+import useScreenSize from '../../hooks/useScreenSize';
 
-const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
+const TopWidgetCard = ({ data=[],  onCardSelect }) => {
+  const screenWidth = useScreenSize();
+  const [itemsPerPage, setItemsPerPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
-
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const [hoveredCard, setHoveredCard] = useState(null);
+ // Adjust itemsPerPage based on screen width
+ useEffect(() => {
+  if (screenWidth < 640) setItemsPerPage(1); // Small screens
+  else if (screenWidth < 768) setItemsPerPage(2); // Medium screens
+  else if (screenWidth < 1024) setItemsPerPage(3); // Large screens
+  else if (screenWidth < 1280) setItemsPerPage(4); // Extra large screens and above
+  else setItemsPerPage(5); // Extra large screens and above
+}, [screenWidth]);
+  
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
 
   const currentData = useMemo(
     () => data?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage),
@@ -29,10 +41,10 @@ const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
   };
 
   return (
-    <div className="w-full">
-      <Carousel className="w-full">
+    <div>
+      <Carousel className=" flex items-center justify-center mr-4">
         <CarouselContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {currentData.map((item, index) => (
+          {currentData?.map((item, index) => (
             <motion.div
               key={item.id || index}
               variants={cardVariants}
@@ -43,11 +55,19 @@ const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
               <CarouselItem>
                 <Card
                   onClick={() => handleCardClick(item)}
+                  onMouseEnter={() => setHoveredCard(item)}
+                  onMouseLeave={() => setHoveredCard(null)}
                   tabIndex={0}
-                  className={`cursor-pointer shadow-lg rounded-lg border ${
-                    selectedCard === item ? 'ring-2 ring-blue-500' : 'border-gray-200'
+                  style={{
+                    border: selectedCard === item
+                      ? '2px solid blue' // Selected card border
+                      : hoveredCard === item
+                      ? '2px solid gray' // Hover border
+                      : '1px solid lightgray', // Default border
+                  }}
+                  className={`cursor-pointer shadow-lg rounded-lg ${
+                    selectedCard === item ? 'ring-2 ring-blue-500' : ''
                   }`}
-                  aria-selected={selectedCard === item}
                 >
                   <CardContent className="flex items-center p-4 h-40">
                     {item.icon && <img src={item.icon} alt="icon" className="w-20 h-20 rounded-lg border-2 border-black mr-4" />}

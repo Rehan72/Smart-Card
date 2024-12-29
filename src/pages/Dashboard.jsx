@@ -1,5 +1,5 @@
 import { Edit, Trash } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { InputField } from "../components/commonComponents/InputField";
 import { SelectField } from "../components/commonComponents/SelectField";
@@ -9,6 +9,7 @@ import { Card, CardContent } from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
 import { Label } from "../components/ui/label";
 import UserCardSkeleton from "../skeleton/UserCardSkeleton";
+import TopWidgetCardSkeleton from "../skeleton/UserCardSkeleton";
 const TopWidgetCard = lazy(() => import('../components/commonComponents/TopWidgetCard'))
 function Dashboard() {
   const [selectedState, setSelectedState] = useState("");
@@ -16,6 +17,7 @@ function Dashboard() {
   const [selectNewAddress,setSelectNewAddress]=useState('')
   const [selectedCardDetails, setSelectedCardDetails] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [data, setData] = useState(null);
   // Function to handle card selection
   const handleCardSelect = (card) => {
     setSelectedCardDetails(card); // Update the selected card details
@@ -32,17 +34,39 @@ function Dashboard() {
     skills: ["React", "JavaScript", "CSS"],
   };
 
-  const data = [
-    { title: "Card 1", value: "100", icon: "/path/to/icon1.png" },
-    { title: "Card 2", value: "200", icon: "/path/to/icon2.png" },
-    { title: "Card 3", value: "300", icon: "/path/to/icon3.png" },
-    { title: "Card 4", value: "100", icon: "/path/to/icon1.png" },
-    { title: "Card 5", value: "200", icon: "/path/to/icon2.png" },
-    { title: "Card 6", value: "300", icon: "/path/to/icon3.png" },
-    { title: "Card 7", value: "100", icon: "/path/to/icon1.png" },
-    { title: "Card 8", value: "200", icon: "/path/to/icon2.png" },
-
-  ];
+  const fetchData = () =>
+    new Promise((resolve) =>
+      setTimeout(() => {
+        resolve([
+          { title: "Card 1", value: "100", icon: "/path/to/icon1.png" },
+          { title: "Card 2", value: "200", icon: "/path/to/icon2.png" },
+          { title: "Card 3", value: "300", icon: "/path/to/icon3.png" },
+          { title: "Card 4", value: "100", icon: "/path/to/icon1.png" },
+          { title: "Card 5", value: "200", icon: "/path/to/icon2.png" },
+          { title: "Card 6", value: "300", icon: "/path/to/icon3.png" },
+          { title: "Card 7", value: "100", icon: "/path/to/icon1.png" },
+          { title: "Card 8", value: "200", icon: "/path/to/icon2.png" },
+        ]);
+      }, 2000)
+    );
+  
+  const resource = {
+    read: async () => {
+      const data = await fetchData();
+      return data;
+    },
+  };
+  console.log(data);
+  
+  useEffect(() => {
+    // Simulate data fetching delay
+    resource.read().then((data) => {
+      setData(data);
+      console.log(data, "Data fetched");
+    });
+     
+  }, []);
+ 
 
   const stateData = [
     { value: "California", label: "California" },
@@ -87,13 +111,13 @@ setIsDialogOpen(true)
   return (
     <>
       <div className="ml-4 mr-4">
-      <Suspense fallback={<TopWidgetCard/>}>
-      <TopWidgetCard data={data} onCardSelect={handleCardSelect} />
-      </Suspense>
+      <Suspense fallback={<TopWidgetCardSkeleton />}>
+  <TopWidgetCard data={data} onCardSelect={handleCardSelect} />
+</Suspense>
         
       </div>
 
-      <section className="mt-6">
+      <section className="mt-6 overflow-hidden ">
         <h1 className="text-black text-xl font-semibold mb-2">CARD DETAILS</h1>
 
         <Suspense fallback={<UserCardSkeleton/>}>

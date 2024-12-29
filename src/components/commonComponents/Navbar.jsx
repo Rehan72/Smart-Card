@@ -10,7 +10,7 @@ import {
    Phone,
    Users
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/Theme-Provider";
 import { preText } from "../../utils/Constant";
@@ -19,7 +19,24 @@ const Navbar = () => {
     const { theme } = useTheme();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
+  // Check screen size and update state
+  useEffect(() => {
+    const handleResize = () => {
+      const isSmall = window.innerWidth < 768; // Define breakpoint (768px for small screens)
+      setIsSmallScreen(isSmall);
+      if (isSmall) {
+        setIsOpen(false);
+      } else{
+        setIsOpen(true);
+      }
+    };
+
+    handleResize(); // Run on initial render
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
@@ -27,7 +44,7 @@ const Navbar = () => {
   // Sidebar animation
   const sidebarVariants = {
     open: {
-      width: "16rem", // Expanded width
+      width: "14rem", // Expanded width
       transition: { type: "spring", stiffness: 70, damping: 10 },
     },
     closed: {
@@ -68,7 +85,9 @@ const Navbar = () => {
     >
       <div className="p-4">
         {/* Toggle Button */}
-        <motion.div
+        {
+          !isSmallScreen ?
+<motion.div
           className="flex items-center justify-center mb-6"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -92,7 +111,9 @@ const Navbar = () => {
             </motion.div>
           </button>
           </Tooltip>
-        </motion.div>
+        </motion.div> : null
+        }
+        
 
         {/* Navigation */}
         <nav>
