@@ -9,9 +9,8 @@ const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  // Memoized current data
   const currentData = useMemo(
-    () => data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage),
+    () => data?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage),
     [currentPage, data, itemsPerPage]
   );
 
@@ -31,8 +30,8 @@ const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
 
   return (
     <div className="w-full">
-      <Carousel className="">
-        <CarouselContent className="flex flex-wrap -ml-2 md:-ml-4">
+      <Carousel className="w-full">
+        <CarouselContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {currentData.map((item, index) => (
             <motion.div
               key={item.id || index}
@@ -40,35 +39,25 @@ const TopWidgetCard = ({ data, itemsPerPage = 4, onCardSelect }) => {
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              className={`md:basis-1/3 lg:basis-1/4 w-full pl-2 md:pl-4`}
             >
               <CarouselItem>
-                <div className="p-2">
-                  <Card
-                    onClick={() => handleCardClick(item)}
-                    tabIndex={0}
-                    className={`cursor-pointer shadow-lg rounded-lg border ${
-                      selectedCard === item ? 'ring-2 ring-blue-500' : 'border-gray-200'
-                    }`}
-                    aria-selected={selectedCard === item}
-                  >
-                    <CardContent className="flex items-center p-4 h-40">
-                      {/* Profile Image */}
-                      {/* <img
-                        src={item.image || '/default-avatar.png'}
-                        alt="profile"
-                        className="w-20 h-20 rounded-sm  border-2 border-black mr-4"
-                      /> */}
-                      {item.icon && <img src={item.icon} alt="icon" className="w-20 h-20 rounded-lg  border-2 border-black mr-4" />}
-                      {/* ITS ID and Name */}
-                      <div>
-                        <p className="text-sm font-bold text-gray-700">ITS ID</p>
-                        <p className="text-base font-medium text-gray-900">{item.title}</p>
-                        <p className="text-base font-medium text-gray-900">{item.name || 'Name'}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                <Card
+                  onClick={() => handleCardClick(item)}
+                  tabIndex={0}
+                  className={`cursor-pointer shadow-lg rounded-lg border ${
+                    selectedCard === item ? 'ring-2 ring-blue-500' : 'border-gray-200'
+                  }`}
+                  aria-selected={selectedCard === item}
+                >
+                  <CardContent className="flex items-center p-4 h-40">
+                    {item.icon && <img src={item.icon} alt="icon" className="w-20 h-20 rounded-lg border-2 border-black mr-4" />}
+                    <div>
+                      <p className="text-sm font-bold text-gray-700">ITS ID</p>
+                      <p className="text-base font-medium text-gray-900">{item.title}</p>
+                      <p className="text-base font-medium text-gray-900">{item.name || 'Name'}</p>
+                    </div>
+                  </CardContent>
+                </Card>
               </CarouselItem>
             </motion.div>
           ))}
