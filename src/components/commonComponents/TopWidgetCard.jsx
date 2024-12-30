@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
+import useScreenSize from '../../hooks/useScreenSize';
 import { Card, CardContent } from '../ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel';
-import useScreenSize from '../../hooks/useScreenSize';
 
 const TopWidgetCard = ({ data=[],  onCardSelect }) => {
   const screenWidth = useScreenSize();
@@ -64,6 +64,7 @@ const TopWidgetCard = ({ data=[],  onCardSelect }) => {
                       : hoveredCard === item
                       ? '2px solid gray' // Hover border
                       : '1px solid lightgray', // Default border
+                      width: '250px',
                   }}
                   className={`cursor-pointer shadow-lg rounded-lg ${
                     selectedCard === item ? 'ring-2 ring-blue-500' : ''
@@ -71,7 +72,7 @@ const TopWidgetCard = ({ data=[],  onCardSelect }) => {
                 >
                   <CardContent className="flex items-center p-4 h-40">
                     {item.icon && <img src={item.icon} alt="icon" className="w-20 h-20 rounded-lg border-2 border-black mr-4" />}
-                    <div>
+                    <div className="flex flex-col space-y-2">
                       <p className="text-sm font-bold text-gray-700">ITS ID</p>
                       <p className="text-base font-medium text-gray-900">{item.title}</p>
                       <p className="text-base font-medium text-gray-900">{item.name || 'Name'}</p>

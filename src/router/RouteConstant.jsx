@@ -1,5 +1,6 @@
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
+import User from "../pages/User";
 import { preText } from "../utils/Constant";
 
 
@@ -15,6 +16,12 @@ export default [
      //permission: RoutePermission?.PLATFORM_ADMIN,
      exact: true
    },
+   {
+      element: User,
+      path: `${routeParams}user`,
+     // permission: RoutePermission?.SYSTEM_ADMIN,
+      exact: true
+    },
    {
      element: Home,
      path: `${routeParams}home`,

@@ -99,7 +99,7 @@ const Navbar = () => {
       // className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-xl font-semibold text-lg transition-all transform hover:scale-105"
         >
           <button
-            className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full shadow-md hover:bg-gray-200 transition-all"
+            className="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full shadow-md hover:bg-gray-200 transition-all"
             onClick={toggleDropdown}
             //title={isOpen ? 'Collapse' : 'Expand'}
           >

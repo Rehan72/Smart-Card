@@ -15,7 +15,7 @@ export const SelectField = ({
       <select
         id={id}
         name={name}
-        value={value} // Controlled by the parent component
+        value={value ?? ""} // Controlled by the parent component
         onChange={onChange}
         required={required}
         className={cn(

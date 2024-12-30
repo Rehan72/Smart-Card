@@ -8,8 +8,9 @@ import AddNewAddress from "../components/commonComponents/AddNewAddress";
 import { Card, CardContent } from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
 import { Label } from "../components/ui/label";
+import TopWidgetCardSkeleton from "../skeleton/TopCardSkeleton";
 import UserCardSkeleton from "../skeleton/UserCardSkeleton";
-import TopWidgetCardSkeleton from "../skeleton/UserCardSkeleton";
+
 const TopWidgetCard = lazy(() => import('../components/commonComponents/TopWidgetCard'))
 function Dashboard() {
   const [selectedState, setSelectedState] = useState("");
@@ -18,6 +19,10 @@ function Dashboard() {
   const [selectedCardDetails, setSelectedCardDetails] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState(null);
+  const [deliveryAddresses, setDeliveryAddresses] = useState([]);
+  const [currentAddress, setCurrentAddress] = useState(null); // Stores the address being edited
+  const [editIndex, setEditIndex] = useState(null); // Stores the index of the address being edited
+
   // Function to handle card selection
   const handleCardSelect = (card) => {
     setSelectedCardDetails(card); // Update the selected card details
@@ -56,13 +61,13 @@ function Dashboard() {
       return data;
     },
   };
-  console.log(data);
+ 
   
   useEffect(() => {
     // Simulate data fetching delay
     resource.read().then((data) => {
       setData(data);
-      console.log(data, "Data fetched");
+      
     });
      
   }, []);
@@ -97,23 +102,60 @@ function Dashboard() {
   };
 
   const handleChangeAddress=()=>{
-console.log("Hi");
+
 setSelectNewAddress(true)
 setIsDialogOpen(true)
 
   }
-  const handleLocationChange = (newLocation) => {
-  // setLocation(newLocation);
-   console.log("Updated Location:", newLocation);
-   // Handle updated location in state or API calls
+
+
+//   const handleLocationChange = (newAddress) => {
+//   // Add new address to the previous addresses list
+//   setDeliveryAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+//    console.log("Updated Location:", newAddress);
+//    // Handle updated location in state or API calls
+//  };
+
+ // Handle Edit Icon Click
+ const handleEditAddress = (index) => {
+   setCurrentAddress(deliveryAddresses[index]);
+   setEditIndex(index);
+   setIsDialogOpen(true); // Open the dialog for editing
+ };
+
+ // Handle Delete Icon Click
+ const handleDeleteAddress = (index) => {
+   const updatedAddresses = [...deliveryAddresses];
+   updatedAddresses.splice(index, 1);
+   setDeliveryAddresses(updatedAddresses);
+ };
+
+  // Save Address (for both Add and Edit)
+  const handleLocationChange = (newAddress) => {
+   const updatedAddresses = [...deliveryAddresses];
+
+   if (editIndex !== null) {
+     // Update existing address
+     updatedAddresses[editIndex] = newAddress;
+   } else {
+     // Add new address
+     updatedAddresses.push(newAddress);
+   }
+
+   setDeliveryAddresses(updatedAddresses);
+   setCurrentAddress(null);
+   setEditIndex(null);
  };
  
   return (
     <>
-      <div className="ml-4 mr-4">
-      <Suspense fallback={<TopWidgetCardSkeleton />}>
+      <div className="flex items-center justify-center ml-4 mr-4">
+      {
+         data?  <TopWidgetCard data={data} onCardSelect={handleCardSelect} />: <TopWidgetCardSkeleton />
+      }
+      {/* <Suspense fallback={<TopWidgetCardSkeleton />}>
   <TopWidgetCard data={data} onCardSelect={handleCardSelect} />
-</Suspense>
+</Suspense> */}
         
       </div>
 
@@ -386,13 +428,56 @@ setIsDialogOpen(true)
                 </form>
               </CardContent>
             </Card>
+
+           {/* Render the list of Address Cards */}
+<div className="mt-4 flex flex-wrap gap-4 justify-start">
+  {deliveryAddresses.length > 0 ? (
+    deliveryAddresses.map((address, index) => (
+      <div key={index} className="flex items-center justify-center w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <Card key={index} className="cursor-pointer shadow-lg rounded-lg border-2 border-lightgray w-full">
+          <CardContent key={index} className="flex items-center p-4 h-auto min-h-[200px]">
+            <div className="flex flex-col w-full">
+              {/* Title Section with Icons */}
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-lg">Delivery Address {index + 1}</h3>
+                <div className="flex gap-4">
+                  <Edit 
+                    size={20} 
+                    className="cursor-pointer text-blue-500 hover:text-blue-700"
+                    onClick={() => handleEditAddress(index)} // handleEditAddress function
+                  />
+                  <Trash 
+                    size={20} 
+                    className="cursor-pointer text-red-500 hover:text-red-700"
+                    onClick={() => handleDeleteAddress(index)} // handleDeleteAddress function
+                  />
+                </div>
+              </div>
+
+              {/* Address Information */}
+              <p className="text-sm"><strong>Address Line 1:</strong> {address.addressLine1}</p>
+              <p className="text-sm"><strong>Address Line 2:</strong> {address.addressLine2}</p>
+              <p className="text-sm"><strong>Postal Code:</strong> {address.postalCode}</p>
+              <p className="text-sm"><strong>State:</strong> {address.state}</p>
+              <p className="text-sm"><strong>City:</strong> {address.city}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    ))
+  ) : (
+    <p className="text-center text-lg text-gray-500">No addresses added yet.</p>
+  )}
+</div>
+
           </div>
         </Suspense>
       </section>
+
       {
          isDialogOpen? <AddNewAddress  onLocationChange={handleLocationChange}
           showDialog={isDialogOpen}
-          setShowDialog={setIsDialogOpen}/>:""
+          setShowDialog={setIsDialogOpen} initialAddress={currentAddress} />:""
       }
     </>
   );

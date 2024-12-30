@@ -18,25 +18,31 @@ const LocationSearch = ({ onPlaceSelected }) => {
       // Event listener for place change (both keyboard and mouse)
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
+        console.log("Selected place:", place); // Log selected place for debugging
 
-        // Ensure the place has geometry data
         if (place.geometry) {
           const location = {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng(),
           };
 
-          // Update the input field with the selected place
           const formattedAddress = place.formatted_address || place.name;
-          setInputValue(formattedAddress); // Update input value in state
+
+          // Manually update input value after place selection
+          setInputValue(formattedAddress);
 
           // Callback with the selected location
           onPlaceSelected(location);
         }
       });
 
-      // Add listener for input changes (so value updates if you type in the input manually)
+      // Optional: Handle focus or click events to reset bounds for new search
       inputRef.current.addEventListener("focus", () => {
+        autocomplete.setBounds(new window.google.maps.LatLngBounds()); // Reset bounds to allow suggestion retrieval
+      });
+
+      // Manually trigger a mouse click event to reset bounds
+      inputRef.current.addEventListener("click", () => {
         autocomplete.setBounds(new window.google.maps.LatLngBounds());
       });
     }
