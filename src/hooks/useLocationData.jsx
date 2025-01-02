@@ -20,7 +20,7 @@ export const useLocationData = () => {
    setStates(fetchedStates);
 
    if (selectedState) {
-      debugger
+    
      // Fetch cities based on selected state
      const fetchedCities = getCitiesForState(selectedState);
      setCities(fetchedCities);
@@ -28,7 +28,7 @@ export const useLocationData = () => {
  }, [selectedState]);
 
  const getCitiesForState = (stateCode) => {
-   debugger
+   
    // Return mock data for cities based on the selected state
    const citiesByState = {
      CA: [

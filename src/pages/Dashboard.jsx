@@ -5,6 +5,7 @@ import { InputField } from "../components/commonComponents/InputField";
 import { SelectField } from "../components/commonComponents/SelectField";
 // import TopWidgetCard from "../components/commonComponents/TopWidgetCard";
 import AddNewAddress from "../components/commonComponents/AddNewAddress";
+import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
 import { Label } from "../components/ui/label";
@@ -158,7 +159,11 @@ setIsDialogOpen(true)
 </Suspense> */}
         
       </div>
-
+<div>
+<Link to={"new-card"}>
+   <Button className="mt-9 flex ">Add New Card</Button>
+   </Link>
+</div>
       <section className="mt-6 overflow-hidden ">
         <h1 className="text-black text-xl font-semibold mb-2">CARD DETAILS</h1>
 
@@ -173,7 +178,7 @@ setIsDialogOpen(true)
                 <img
                   src={user.image}
                   alt="icon"
-                  className="w-50 h-50 p-4 mt-2 rounded-lg  border-2 border-black mr-4"
+                  className="w-50 h-50 p-4 mt-2 mr-6 rounded-lg  border-2 border-black ml-8"
                 />
 
                 {/* ITS ID and Name */}

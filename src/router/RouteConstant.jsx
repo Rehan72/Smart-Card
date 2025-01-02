@@ -1,3 +1,4 @@
+import AddNewCard from "../pages/card/AddNewCard";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import User from "../pages/User";
@@ -28,4 +29,10 @@ export default [
     // permission: RoutePermission?.SYSTEM_ADMIN,
      exact: true
    },
+   {
+      element: AddNewCard,
+      path: `${routeParams}dashboard/new-card`,
+     // permission: RoutePermission?.SYSTEM_ADMIN,
+      exact: true
+    },
 ]
