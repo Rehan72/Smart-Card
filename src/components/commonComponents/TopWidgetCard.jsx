@@ -6,18 +6,14 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 
 const TopWidgetCard = ({ data=[],  onCardSelect }) => {
   const screenWidth = useScreenSize();
-  const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
  // Adjust itemsPerPage based on screen width
  useEffect(() => {
-  if (screenWidth < 640) setItemsPerPage(1); // Small screens
-  else if (screenWidth < 768) setItemsPerPage(2); // Medium screens
-  else if (screenWidth < 1024) setItemsPerPage(3); // Large screens
-  else if (screenWidth < 1280) setItemsPerPage(4); // Extra large screens and above
-  else setItemsPerPage(5); // Extra large screens and above
-}, [screenWidth]);
+  setItemsPerPage(3); // Always display 3 cards per page
+}, []);
   
   const totalPages = Math.ceil(data?.length / itemsPerPage);
 
@@ -43,7 +39,7 @@ const TopWidgetCard = ({ data=[],  onCardSelect }) => {
   return (
     <div>
       <Carousel className=" flex items-center justify-center mr-4">
-        <CarouselContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+       <CarouselContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {currentData?.map((item, index) => (
             <motion.div
               key={item.id || index}
@@ -64,6 +60,7 @@ const TopWidgetCard = ({ data=[],  onCardSelect }) => {
                       : hoveredCard === item
                       ? '2px solid gray' // Hover border
                       : '1px solid lightgray', // Default border
+                      minWidth: '380px', 
                       width: '250px',
                   }}
                   className={`cursor-pointer shadow-lg rounded-lg ${

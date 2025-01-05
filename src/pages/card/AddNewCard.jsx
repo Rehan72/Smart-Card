@@ -25,8 +25,7 @@ const StepperForm = () => {
     stepThree: {}
   }); // store form values
 const [validateImage ,setValidateImage] = useState(false)
-  // Get the correct schema based on current step
-  const currentSchema = stepOneSchema[currentStep] || z.object({});
+ 
   
   // Initialize React Hook Form
   const methods = useForm({
