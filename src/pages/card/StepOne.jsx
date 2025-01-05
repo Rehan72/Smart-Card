@@ -1,179 +1,175 @@
-import { Suspense, useEffect, useState } from 'react';
-import { InputField } from "../../components/commonComponents/InputField"; // Assuming your InputField component is set up like this
-import { Button } from '../../components/ui/button';
-import { Card, CardContent } from '../../components/ui/card'; // You can replace with your own Card and CardContent components
+import { Suspense, useEffect, useState } from "react";
+import { InputField } from "../../components/commonComponents/InputField";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent } from "../../components/ui/card";
+import { useFormContext } from "react-hook-form";
+import ImageUploader from "./ImageUploader";
 
-const UserCardSkeleton = () => (
-  <div>Loading...</div>
-);
-const user = {
-   name: "John Doe",
-   image: "https://via.placeholder.com/400",
-   bio: "Software Engineer with 5 years of experience in web development.",
-   skills: ["React", "JavaScript", "CSS"],
- }
+const UserCardSkeleton = () => <div>Loading...</div>;
 
-function StepOne ({ formValues, setFormValues, errors }){
-   const [userDetails, setUserDetails] = useState(formValues);
-    useEffect(() => {
-      setUserDetails(formValues); // Update address if formValues change
-     }, [formValues]);
-   
-     const handleChange = (field, value) => {
-      setUserDetails((prev) => ({ ...prev, [field]: value }));
-      setFormValues({ [field]: value });
-    };  
-   return (
-<section className="mt-6 overflow-hidden">
-    {/* <h1 className="text-black text-xl font-semibold mb-2">USer DETAILS</h1> */}
+function StepOne({ formValues, setFormValues,validateImage }) {
+  const { register, setValue, clearErrors, formState: { errors } } = useFormContext();
+console.log(validateImage,"validateImage");
+ const [showUploadImage, setShowUploadImage] = useState(false);
+ const [uploadImage, setUploadedImage] = useState(null);
+  const handleChange = (field, value) => {
+    setValue(field, value); // Update react-hook-form state
+    clearErrors(field); // Clear validation errors for the field
+    setFormValues((prev) => ({ ...prev, [field]: value })); // Update parent form state
+  };
 
-    <Suspense fallback={<UserCardSkeleton />}>
-      <div>
-        {/* First Card */}
-        <Card className="w-full shadow-md rounded-lg border">
-          {/* <p className="ml-4 mt-2 text-1xl mb-4">User Name</p> */}
-          <CardContent className="mt-4 flex">
-         
-            {/* Profile Image */}
-            <div className="flex-shrink-0 mt-4">
-            
+  const handleUploadImage = () => {
+    setShowUploadImage(true);
+  }
+
+  const handleImageUpload = (image) => {
+    setUploadedImage(image); // Update the parent state with the uploaded image
+    setFormValues((prev) => ({ ...prev, image: image }));
+    console.log("Uploaded Image:", image.file.name);
+  }
+  useEffect(() => {
+    if (formValues.image && !uploadImage) {
+      setUploadedImage( formValues.image); // Restore image from formValues
+    }
+  }, [formValues.image]);
+
+  return (
+    <>
+    <section className="mt-6 overflow-hidden">
+      <Suspense fallback={<UserCardSkeleton />}>
+        <div>
+          <Card className="w-full shadow-md rounded-lg border">
+            <CardContent className="mt-4 flex">
+              <div className="flex-shrink-0 mt-4">
                 <img
-                  src={ user.image}
-                  alt="icon"
-                  className="w-40 h-40 rounded-lg border-2 border-black"
+                  src={uploadImage?.preview || "https://via.placeholder.com/400"}
+                  alt="Full Preview"
+                  width={160}
+                  height={160}
+                 //  className="rounded-lg border-2 border-gray-300"
+                 className={validateImage?"rounded-lg border-2 border-red-500":"rounded-lg border-2 border-gray-300 max-w-full max-h-screen"}
                 />
-                 <Button className="mt-4 ml-3">Upload Image</Button>
+                <Button onClick={handleUploadImage} className="mt-4 ml-3">Upload Image</Button>
               </div>
 
-            {/* Form Fields */}
-            <form className="grid grid-cols-3 gap-4 w-full ml-8">
-            
-              {/* Name Field */}
-              <div className="relative col-span-2">
-                <InputField
-                  id="name"
-                  name={"name"}
-                  type="text"
-                  label="Name"
-                  placeholder=" "
-                  value={userDetails.name}
-                    onChange={(e) =>
-                      handleChange("name", e.target.value)
-                    }
-                  required
-                />
-                {errors.name && (
-  <p className="text-red-500 text-xs">{errors.name?.message}</p>
-)}
-              </div>
+              <div className="grid grid-cols-3 gap-4 w-full ml-8">
+                {/* Name Field */}
+                <div className="relative col-span-2">
+                  <InputField
+                    id="name"
+                    name="name"
+                    type="text"
+                    label="Name"
+                    {...register("name")}
+                    value={formValues.name || ""}
+                    onChange={(e) => handleChange("name", e.target.value)}
+                    required
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs">{errors.name.message}</p>
+                  )}
+                </div>
 
-              {/* ITS ID Field */}
-              <div className="relative col-span-1">
-                <InputField
-                  id="itsId"
-                  type="text"
-                  name={"itsId"}
-                  label="ITS-ID"
-                  value={userDetails.itsId}
-                    onChange={(e) =>
-                      handleChange("itsId", e.target.value)
-                    }
-                  placeholder=" "
-                  required
-                />
-                {errors.itsId && (
-                  <p className="text-red-500 text-xs">{errors.itsId.message}</p>
-                )}
-              </div>
+                {/* ITS ID Field */}
+                <div className="relative col-span-1">
+                  <InputField
+                    id="itsId"
+                    name="itsId"
+                    type="text"
+                    label="ITS-ID"
+                    {...register("itsId")}
+                    value={formValues.itsId || ""}
+                    onChange={(e) => handleChange("itsId", e.target.value)}
+                    required
+                  />
+                  {errors.itsId && (
+                    <p className="text-red-500 text-xs">{errors.itsId.message}</p>
+                  )}
+                </div>
 
-              {/* Jamiat Name Field */}
-              <div className="relative col-span-1">
-                <InputField
-                  id="jamiatName"
-                  type="text"
-                  name={"jamiatName"}
-                  label="Jamiat Name"
-                  value={userDetails.jamiatName}
-                    onChange={(e) =>
-                      handleChange("jamiatName", e.target.value)
-                    }
-                  placeholder=" "
-                  required
-                />
-                {errors.jamiatName && (
-                  <p className="text-red-500 text-xs">{errors.jamiatName.message}</p>
-                )}
-              </div>
+                {/* Jamiat Name Field */}
+                <div className="relative col-span-1">
+                  <InputField
+                    id="jamiatName"
+                    name="jamiatName"
+                    type="text"
+                    label="Jamiat Name"
+                    {...register("jamiatName")}
+                    value={formValues.jamiatName || ""}
+                    onChange={(e) => handleChange("jamiatName", e.target.value)}
+                    required
+                  />
+                  {errors.jamiatName && (
+                    <p className="text-red-500 text-xs">{errors.jamiatName.message}</p>
+                  )}
+                </div>
 
-              {/* Jamaat Name Field */}
-              <div className="relative col-span-1">
-                <InputField
-                  id="jamaatName"
-                  type="text"
-                  name={"jamaatName"}
-                  label="Jamaat Name"
-                  value={userDetails.jamaatName}
-                    onChange={(e) =>
-                      handleChange("jamaatName", e.target.value)
-                    }
-                  placeholder=" "
-                  required
-                />
-                {errors.jamaatName && (
-                  <p className="text-red-500 text-xs">{errors.jamaatName.message}</p>
-                )}
-              </div>
+                {/* Jamaat Name Field */}
+                <div className="relative col-span-1">
+                  <InputField
+                    id="jamaatName"
+                    name="jamaatName"
+                    type="text"
+                    label="Jamaat Name"
+                    {...register("jamaatName")}
+                    value={formValues.jamaatName || ""}
+                    onChange={(e) => handleChange("jamaatName", e.target.value)}
+                    required
+                  />
+                  {errors.jamaatName && (
+                    <p className="text-red-500 text-xs">{errors.jamaatName.message}</p>
+                  )}
+                </div>
 
-              {/* Age Field */}
-              <div className="relative col-span-1">
-                <InputField
-                  id="age"
-                  type="text"
-                  name={"age"}
-                  label="Age"
-                  value={userDetails.age}
-                    onChange={(e) =>
-                      handleChange("age", e.target.value)
-                    }
-                  placeholder=" "
-                  required
-                />
-                {errors.age && (
-                  <p className="text-red-500 text-xs">{errors.age.message}</p>
-                )}
-              </div>
+                {/* Age Field */}
+                <div className="relative col-span-1">
+                  <InputField
+                    id="age"
+                    name="age"
+                    type="text"
+                    label="Age"
+                    {...register("age")}
+                    value={formValues.age || ""}
+                    onChange={(e) => handleChange("age", e.target.value)}
+                    required
+                  />
+                  {errors.age && (
+                    <p className="text-red-500 text-xs">{errors.age.message}</p>
+                  )}
+                </div>
 
-              {/* Mobile No Field */}
-              <div className="relative col-span-1 mb-6">
-                <InputField
-                  id="mobileNo"
-                  type="text"
-                  name={"mobileNo"}
-                  label="Mobile No"
-                  value={userDetails.mobileNo}
-                    onChange={(e) =>
-                      handleChange("mobileNo", e.target.value)
-                    }
-                  placeholder=" "
-                  required
-                  
-                />
-                {errors.mobileNo && (
-                  <p className="text-red-500 text-xs">{errors.mobileNo.message}</p>
-                )}
+                {/* Mobile No Field */}
+                <div className="relative col-span-1 mb-6">
+                  <InputField
+                    id="mobileNo"
+                    name="mobileNo"
+                    type="text"
+                    label="Mobile No"
+                    {...register("mobileNo")}
+                    value={formValues.mobileNo || ""}
+                    onChange={(e) => handleChange("mobileNo", e.target.value)}
+                    required
+                  />
+                  {errors.mobileNo && (
+                    <p className="text-red-500 text-xs">{errors.mobileNo.message}</p>
+                  )}
+                </div>
               </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </Suspense>
-  </section>
-   )
+            </CardContent>
+          </Card>
+        </div>
+      </Suspense>
+    </section>
+
+    {
+      showUploadImage ? <ImageUploader
+      onImageChange={handleImageUpload}
+      showDialog={setShowUploadImage}
+      setShowDialog={setShowUploadImage}
+    />:''
+    }
+    </>
+  );
 }
-
-
-   
-  
-
 
 export default StepOne;

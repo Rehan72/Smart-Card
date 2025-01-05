@@ -194,7 +194,23 @@ function AddNewAddress({ onLocationChange, showDialog, setShowDialog,initialAddr
             />
             {errors.addressLine2 && <p className="text-red-500 text-sm">{errors.addressLine2}</p>}
           </div>
-
+{/* State Field */}
+<div className="relative col-span-1 mb-6 mt-2">
+            <SelectField
+              id="state"
+              name="state"
+              label="Select State"
+              value={selectedState}
+              onChange={(e) => {
+                setSelectedState(e.target.value);
+                validateField("state", e.target.value);
+              }}
+              options={states}
+              disabled={!selectedState}
+              required
+            />
+            {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+          </div>
           {/* City Field */}
           <div className="relative col-span-1 mb-6 mt-2">
             <SelectField
@@ -212,23 +228,7 @@ function AddNewAddress({ onLocationChange, showDialog, setShowDialog,initialAddr
             {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
           </div>
 
-          {/* State Field */}
-          <div className="relative col-span-1 mb-6 mt-2">
-            <SelectField
-              id="state"
-              name="state"
-              label="Select State"
-              value={selectedState}
-              onChange={(e) => {
-                setSelectedState(e.target.value);
-                validateField("state", e.target.value);
-              }}
-              options={states}
-              disabled={!selectedState}
-              required
-            />
-            {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
-          </div>
+          
 
           {/* Postal Code */}
           <div className="relative col-span-1 mb-6 mt-2">

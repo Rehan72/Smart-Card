@@ -3,7 +3,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { useLocationData } from "../../hooks/useLocationData";
 import AddressForm from "./AddressForm";
 
-function StepThree({ formValues, setFormValues, errors}) {
+const AddressStep = ({ stepKey, formValues, setFormValues }) => {
   const [address, setAddress] = useState(formValues);
   const {
     states,
@@ -14,23 +14,25 @@ function StepThree({ formValues, setFormValues, errors}) {
     setSelectedCity,
   } = useLocationData();
 
+
   useEffect(() => {
     setAddress(formValues); // Sync address with formValues
+    console.log(states, cities, selectedState, selectedCity,"!!!!!!");
   }, [formValues]);
 
   const handleChange = (field, value) => {
     setAddress((prev) => ({ ...prev, [field]: value }));
-    setFormValues({ [field]: value });
+    setFormValues((prev) => ({ ...prev, [stepKey]: { ...prev[stepKey], [field]: value } }));
   };
 
   const handleStateChange = (value) => {
     setSelectedState(value);
-    setFormValues({ state: value });
+    setFormValues((prev) => ({ ...prev, [stepKey]: { ...prev[stepKey], state: value } }));
   };
 
   const handleCityChange = (value) => {
     setSelectedCity(value);
-    setFormValues({ city: value });
+    setFormValues((prev) => ({ ...prev, [stepKey]: { ...prev[stepKey], city: value } }));
   };
 
   return (
@@ -38,10 +40,11 @@ function StepThree({ formValues, setFormValues, errors}) {
       <Card className="w-full shadow-md rounded-lg border">
         <CardContent className="mt-4 flex">
           <AddressForm
-          stepKey="stepThree"
-          formValues={formValues}
-          setFormValues={setFormValues}
-          states={states}
+            formValues={formValues[stepKey] || {}}
+            setFormValues={(updatedValues) =>
+              setFormValues((prev) => ({ ...prev, [stepKey]: updatedValues }))
+            }
+            states={states}
             cities={cities}
             selectedState={selectedState || ""} // Default to an empty string if null
             selectedCity={selectedCity || ""}
@@ -52,6 +55,6 @@ function StepThree({ formValues, setFormValues, errors}) {
       </Card>
     </section>
   );
-}
+};
 
-export default StepThree;
+export default AddressStep;
