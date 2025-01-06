@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { useLocationData } from "../../hooks/useLocationData";
 import AddressForm from "./AddressForm";
 
-function StepTwo({ formValues, setFormValues, errors, }) {
-  const [address, setAddress] = useState(formValues);
+function StepTwo({ formValues, setFormValues }) {
+  
   const {
     states,
     cities,
@@ -14,21 +13,11 @@ function StepTwo({ formValues, setFormValues, errors, }) {
     setSelectedCity,
   } = useLocationData();
 
-  useEffect(() => {
-    setAddress(formValues); // Sync address with formValues
-  }, [formValues]);
+  
 
  
 
-  const handleStateChange = (value) => {
-    setSelectedState(value);
-    setFormValues({ state: value });
-  };
-
-  const handleCityChange = (value) => {
-    setSelectedCity(value);
-    setFormValues({ city: value });
-  };
+  
 
   return (
     <section className="mt-6 overflow-hidden">
@@ -42,8 +31,8 @@ function StepTwo({ formValues, setFormValues, errors, }) {
             cities={cities}
             selectedState={selectedState || ""} // Default to an empty string if null
             selectedCity={selectedCity || ""}
-            handleStateChange={handleStateChange}
-            handleCityChange={handleCityChange}
+            // handleStateChange={handleStateChange}
+            // handleCityChange={handleCityChange}
           />
         </CardContent>
       </Card>

@@ -7,11 +7,12 @@ import ImageUploader from "./ImageUploader";
 
 const UserCardSkeleton = () => <div>Loading...</div>;
 
-function StepOne({ formValues, setFormValues,validateImage }) {
+function UserDetails({ formValues, setFormValues,validateImage }) {
   const { register, setValue, clearErrors, formState: { errors } } = useFormContext();
 console.log(validateImage,"validateImage");
  const [showUploadImage, setShowUploadImage] = useState(false);
  const [uploadImage, setUploadedImage] = useState(null);
+ 
   const handleChange = (field, value) => {
     setValue(field, value); // Update react-hook-form state
     clearErrors(field); // Clear validation errors for the field
@@ -67,7 +68,7 @@ console.log(validateImage,"validateImage");
                     required
                   />
                   {errors.name && (
-                    <p className="text-red-500 text-sm">{errors.name.message}</p>
+                    <p className="text-red-500 text-xs">{errors.name.message}</p>
                   )}
                 </div>
 
@@ -84,7 +85,7 @@ console.log(validateImage,"validateImage");
                     required
                   />
                   {errors.itsId && (
-                    <p className="text-red-500 text-sm">{errors.itsId.message}</p>
+                    <p className="text-red-500 text-xs">{errors.itsId.message}</p>
                   )}
                 </div>
 
@@ -101,7 +102,7 @@ console.log(validateImage,"validateImage");
                     required
                   />
                   {errors.jamiatName && (
-                    <p className="text-red-500 text-sm">{errors.jamiatName.message}</p>
+                    <p className="text-red-500 text-xs">{errors.jamiatName.message}</p>
                   )}
                 </div>
 
@@ -118,7 +119,7 @@ console.log(validateImage,"validateImage");
                     required
                   />
                   {errors.jamaatName && (
-                    <p className="text-red-500 text-sm">{errors.jamaatName.message}</p>
+                    <p className="text-red-500 text-xs">{errors.jamaatName.message}</p>
                   )}
                 </div>
 
@@ -135,7 +136,7 @@ console.log(validateImage,"validateImage");
                     required
                   />
                   {errors.age && (
-                    <p className="text-red-500 text-sm">{errors.age.message}</p>
+                    <p className="text-red-500 text-xs">{errors.age.message}</p>
                   )}
                 </div>
 
@@ -152,7 +153,7 @@ console.log(validateImage,"validateImage");
                     required
                   />
                   {errors.mobileNo && (
-                    <p className="text-red-500 text-sm">{errors.mobileNo.message}</p>
+                    <p className="text-red-500 text-xs">{errors.mobileNo.message}</p>
                   )}
                 </div>
               </div>
@@ -173,4 +174,4 @@ console.log(validateImage,"validateImage");
   );
 }
 
-export default StepOne;
+export default UserDetails;

@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
       <Header />
       <div className="flex flex-1">
         <Navbar />
-        <main className="flex-1  bg-app-background mx-auto px-10 py-8">
+        <main className="flex-1   bg-app-background  px-10 py-8">
         {children}
         </main>
       </div>

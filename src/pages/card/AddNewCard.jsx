@@ -8,8 +8,6 @@ import StepOne from "../card/StepOne";
 import Stepper from "./Stepper";
 import StepThree from "./StepThree";
 import StepTwo from "./StepTwo";
-import { stepOneSchema } from "../../schema/stepOneSchema";
-import { z } from "zod";
 
 const steps = [
   { label: "User Details" },
@@ -21,8 +19,20 @@ const StepperForm = () => {
   const { theme } = useTheme();
   const [currentStep, setCurrentStep] = useState(0);
   const [formValues, setFormValues] = useState({
-    stepTwo: {},
-    stepThree: {}
+    stepTwo: {
+    addressLine1: "",
+    addressLine2: "",
+    state: "",
+    city: "",
+    postalCode: "",
+  },
+  stepThree: {
+    addressLine1: "",
+    addressLine2: "",
+    state: "",
+    city: "",
+    postalCode: "",
+  },
   }); // store form values
 const [validateImage ,setValidateImage] = useState(false)
  
@@ -45,10 +55,10 @@ const [validateImage ,setValidateImage] = useState(false)
   } = methods;
 
   console.log(errors, "errors in stepper form");
-  console.log("formValues:", formValues); // Log errors if validation fails
+  
   // Handle next step logic
   const handleNext = async () => {
-    debugger
+   debugger
     // Trigger validation for current step
     const isValid = await trigger(); 
     if (!isValid) {
@@ -56,31 +66,16 @@ const [validateImage ,setValidateImage] = useState(false)
       return;
     }
     if(currentStep===0){
-      debugger
-      
-      
       if(!formValues?.image && isValid){
         showToast("error","Please upload image");
-        //showToast("success", "Login Successful!");
         setValidateImage(true)
         console.log("Validation formValues:", formValues); // Log errors if validation fails
         return
       }
     }
     
-     // Update form values with the latest data from child components
-  setFormValues((prev) => {
-    const updatedFormValues = { ...prev, ...getValues() };
-console.log(getValues(),"updatedFormValues");
-
-    // Ensure shared fields between stepTwo and stepThree are updated
-    if (currentStep === 1) {
-      debugger
-      updatedFormValues.stepThree = updatedFormValues.stepTwo; // Share data between stepTwo and stepThree
-    }
-
-    return updatedFormValues;
-  });
+ console.log(formValues,"Get all value");
+ 
     // Move to the next step if not on the last step
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
@@ -94,12 +89,12 @@ console.log(getValues(),"updatedFormValues");
   // Handle back step logic
   const handleBack = () => {
     if (currentStep > 0) setCurrentStep((prev) => prev - 1);
-    reset(formValues); // Reset to previous form values
+   // reset(formValues); // Reset to previous form values
   };
 
   // Handle step click
   const handleStepClick = async (index) => {
-    debugger
+    
     setFormValues((prev) => ({ ...prev, ...getValues() })); // Save current form values
 
     const isErrorsEmpty = Object.keys(errors).length === 0;
@@ -109,6 +104,8 @@ console.log(getValues(),"updatedFormValues");
       showToast("error", "Please fill all the mandatory fields");
     }
   };
+
+  console.log("formValues:", formValues); // Log errors if validation fails
 
   return (
     <div className="w-full px-10 py-4">
@@ -142,8 +139,9 @@ console.log(getValues(),"updatedFormValues");
             {currentStep === 1 && (
               <StepTwo
               errors={errors}
-              formValues={formValues.stepTwo}
-              setFormValues={(updatedValues) => setFormValues(prev => ({ ...prev, stepTwo: updatedValues }))}
+              formValues={formValues}
+              setFormValues={setFormValues}
+             // setFormValues={(updatedValues) => setFormValues(prev => ({ ...prev, stepTwo: updatedValues }))}
               setError={setError}
               clearErrors={clearErrors}
               />
@@ -151,8 +149,9 @@ console.log(getValues(),"updatedFormValues");
             {currentStep === 2 && (
               <StepThree
               errors={errors}
-              formValues={formValues.stepThree}
-              setFormValues={(updatedValues) => setFormValues(prev => ({ ...prev, stepThree: updatedValues }))}
+              formValues={formValues}
+              setFormValues={setFormValues}
+             // setFormValues={(updatedValues) => setFormValues(prev => ({ ...prev, stepThree: updatedValues }))}
               setError={setError}
               clearErrors={clearErrors}
               />

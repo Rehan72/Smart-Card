@@ -1,18 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 import { InputField } from "../../components/commonComponents/InputField";
 import { SelectField } from "../../components/commonComponents/SelectField";
-import { useFormContext } from "react-hook-form";
+import { useLocationData } from "../../hooks/useLocationData";
 
 const AddressForm = ({
   stepKey,
-  formValues = {}, // Default to an empty object if undefined
-  states = [],
-  cities = [],
-  selectedState = "",
-  selectedCity = "",
+  formValues = {}, // Default to an empty object
   setFormValues,
-  handleStateChange,
-  handleCityChange,
   labels = {}, // Optional: Custom labels for fields
 }) => {
   const {
@@ -22,11 +17,18 @@ const AddressForm = ({
     formState: { errors },
   } = useFormContext();
   
-console.log(stepKey,"stepKey");
+  const {
+    states,
+    cities,
+    selectedState,
+    selectedCity,
+    setSelectedState,
+    setSelectedCity,
+  } = useLocationData();
 
   const handleChange = (field, value) => {
     setValue(field, value); // Update react-hook-form state
-    clearErrors(field); // Clear validation errors for the field
+    clearErrors(field); // Clear validation errors
     setFormValues((prev) => ({
       ...prev,
       [stepKey]: {
@@ -36,15 +38,29 @@ console.log(stepKey,"stepKey");
     }));
   };
 
+  const handleStateChange = (value) => {
+    setSelectedState(value);
+    handleChange("state", value);
+  };
+
+  const handleCityChange = (value) => {
+    setSelectedCity(value);
+    handleChange("city", value);
+  };
+
+
   useEffect(() => {
-    setValue("state", selectedState); // Sync selected state
-    setValue("city", selectedCity); // Sync selected city
-  }, [selectedState, selectedCity, setValue]);
-console.log(states,cities,"++++");
+    setFormValues((prev) => ({
+      ...prev,
+      [stepKey]:  {}, // Initialize if undefined
+    }));
+  }, [stepKey, setFormValues]);
 
   const renderError = (field) =>
     errors[field] && (
-      <p className="text-red-500 text-sm">{errors[field]?.message}</p>
+      <p className="text-red-500 text-sm">
+         {errors[field]?.message}
+      </p>
     );
 
   return (
@@ -55,8 +71,9 @@ console.log(states,cities,"++++");
           name="addressLine1"
           type="text"
           label="Address Line 1"
-          {...register("addressLine1")} // Register field with react-hook-form
-          defaultValue={formValues?.addressLine1 || ""} // Use defaultValue for controlled input
+          {...register("addressLine1")}
+          value={formValues?.[stepKey]?.addressLine1 || ""}
+          //defaultValue={formValues?.[stepKey]?.addressLine1 || ""}
           onChange={(e) => handleChange("addressLine1", e.target.value)}
           required
         />
@@ -70,7 +87,7 @@ console.log(states,cities,"++++");
           type="text"
           label="Address Line 2"
           {...register("addressLine2")}
-          defaultValue={formValues?.addressLine2 || ""} // Use defaultValue for controlled input
+          value={formValues?.[stepKey]?.addressLine2 || ""}
           onChange={(e) => handleChange("addressLine2", e.target.value)}
           required
         />
@@ -82,12 +99,9 @@ console.log(states,cities,"++++");
           id="state"
           name="state"
           label={labels.state || "Select State"}
-          value={selectedState || formValues?.state || ""}
+          value={selectedState || formValues?.[stepKey]?.state || ""}
           {...register("state")}
-          onChange={(e) => {
-            handleStateChange(e.target.value);
-            handleChange("state", e.target.value);
-          }}
+          onChange={(e) => handleStateChange(e.target.value)}
           options={states}
           required
         />
@@ -99,15 +113,12 @@ console.log(states,cities,"++++");
           id="city"
           name="city"
           label={labels.city || "Select City"}
-          value={selectedCity || formValues?.city || ""}
+          value={selectedCity || formValues?.[stepKey]?.city || ""}
           {...register("city")}
-          onChange={(e) => {
-            handleCityChange(e.target.value);
-            handleChange("city", e.target.value);
-          }}
+          onChange={(e) => handleCityChange(e.target.value)}
           options={cities}
           required
-          //disabled={!selectedState} // Disable city selection if no state is selected
+          disabled={!selectedState} // Disable if no state is selected
         />
         {renderError("city")}
       </div>
@@ -118,9 +129,9 @@ console.log(states,cities,"++++");
           name="postalCode"
           type="text"
           label="Postal Code"
-          placeholder={labels.postalCodePlaceholder || " "}
+          placeholder={labels.postalCodePlaceholder || "Enter postal code"}
           {...register("postalCode")}
-          defaultValue={formValues?.postalCode || ""} // Use defaultValue for controlled input
+          value={formValues?.[stepKey]?.postalCode || ""}
           required
           onChange={(e) => handleChange("postalCode", e.target.value)}
         />

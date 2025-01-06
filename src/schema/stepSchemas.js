@@ -16,11 +16,18 @@ const addressSchema = z.object({
   city: z.string().min(1, "City is required"),
   postalCode: z.string().min(1,"postalCode is required"),
 })
+const addressSchema2 = z.object({
+   addressLine1: z.string().min(1, "Address Line 1 is required"),
+   addressLine2: z.string().min(1, "Address Line 2 is required"),
+   state: z.string().min(1, "State is required"),
+   city: z.string().min(1, "City is required"),
+   postalCode: z.string().min(1,"postalCode is required"),
+ })
 
  const stepSchemas = [
   stepOneSchema,
   addressSchema,
-  addressSchema,
+  addressSchema2,
 ]
 
 export default stepSchemas;
