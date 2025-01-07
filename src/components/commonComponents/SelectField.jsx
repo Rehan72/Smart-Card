@@ -16,7 +16,7 @@ export const SelectField = React.forwardRef(
     ref // Accept the ref here
   ) => {
     return (
-      <div className="relative col-span-1">
+      <div className="relative">
         <select
           id={id}
           name={name}
@@ -25,7 +25,7 @@ export const SelectField = React.forwardRef(
           required={required}
           ref={ref} // Attach the ref here
           className={cn(
-            "peer w-full border-0 border-b-2 border-black bg-transparent px-0 pt-3 text-sm text-black focus:border-black focus:outline-none focus:ring-0",
+            "peer w-full border-0 border-b-2 border-black bg-transparent px-0 pt-3 pb-1 text-sm text-black focus:border-black focus:outline-none focus:ring-0",
             className
           )}
         >

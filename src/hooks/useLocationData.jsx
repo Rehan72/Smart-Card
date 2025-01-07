@@ -28,7 +28,6 @@ export const useLocationData = () => {
  }, [selectedState]);
 
  const getCitiesForState = (stateCode) => {
-   
    // Return mock data for cities based on the selected state
    const citiesByState = {
      CA: [

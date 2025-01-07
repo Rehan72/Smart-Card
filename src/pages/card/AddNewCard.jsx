@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { Button } from "../../components/ui/button";
 import { useTheme } from "../../context/Theme-Provider";
 import { showToast } from "../../hooks/useToast";
 import stepSchemas from "../../schema/stepSchemas";
@@ -35,7 +37,7 @@ const StepperForm = () => {
   },
   }); // store form values
 const [validateImage ,setValidateImage] = useState(false)
- 
+const [isPending, setIsPending] = useState();
   
   // Initialize React Hook Form
   const methods = useForm({
@@ -81,6 +83,7 @@ const [validateImage ,setValidateImage] = useState(false)
       setCurrentStep((prev) => prev + 1);
     } else {
       console.log("Final Form Data:", { ...formValues, ...getValues() }); // Final form submission
+      setIsPending(false)
     }
     // Log which step the call came from
     console.log(`handleNext called from: ${currentStep}`);
@@ -117,7 +120,7 @@ const [validateImage ,setValidateImage] = useState(false)
         isDarkMode={theme}
       />
 
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 dark:text-white">
         {steps[currentStep].label}
       </h2>
 
@@ -159,7 +162,7 @@ const [validateImage ,setValidateImage] = useState(false)
           </div>
 
           <div className="flex justify-between mt-16">
-            <button
+            <Button
               type="button"
               onClick={handleBack}
               className={`select-none rounded-lg bg-gray-900 py-3 px-6 text-center font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg ${
@@ -167,13 +170,14 @@ const [validateImage ,setValidateImage] = useState(false)
               }`}
             >
               Prev
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               className="select-none rounded-lg bg-gray-900 py-3 px-6 text-center font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg"
             >
+              {isPending && <LoaderCircle className="animate-spin mr-2" />}
               {currentStep === steps.length - 1 ? "Submit" : "Next"}
-            </button>
+            </Button>
           </div>
         </form>
       </FormProvider>

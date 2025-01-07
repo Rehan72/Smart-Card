@@ -1,2 +1,2 @@
-export const  projectName = 'itc-smart';
+export const  projectName = 'its-smart';
 export const preText = '/'+ projectName +'/'; 

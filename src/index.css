@@ -149,3 +149,24 @@
      overflow-y: auto; /* Allows scrolling */
    }
  }
+
+
+/* For WebKit browsers (e.g., Chrome, Edge) */
+input:-webkit-autofill {
+   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important; /* Remove background */
+   background-color: transparent !important; /* Remove any background color */
+   color: inherit !important; /* Use the same text color as the input */
+   transition: background-color 5000s ease-in-out 0s; /* Prevent flicker */
+ }
+ 
+ /* For Firefox (if applicable) */
+ input:-moz-autofill {
+   background-color: transparent !important; /* Remove background color */
+   color: inherit !important; /* Ensure consistent text color */
+ }
+ 
+ /* For internal autofill selected states */
+ input:-internal-autofill-selected {
+   background-color: transparent !important;
+   color: inherit !important;
+ }

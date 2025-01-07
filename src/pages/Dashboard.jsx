@@ -1,4 +1,4 @@
-import { Edit, Trash } from "lucide-react";
+import { Edit, Plus, Trash } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { InputField } from "../components/commonComponents/InputField";
@@ -12,18 +12,21 @@ import { Label } from "../components/ui/label";
 import TopWidgetCardSkeleton from "../skeleton/TopCardSkeleton";
 import UserCardSkeleton from "../skeleton/UserCardSkeleton";
 
-const TopWidgetCard = lazy(() => import('../components/commonComponents/TopWidgetCard'))
+const TopWidgetCard = lazy(() =>
+  import("../components/commonComponents/TopWidgetCard")
+);
 function Dashboard() {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectCity] = useState("");
-  const [selectNewAddress,setSelectNewAddress]=useState('')
+  const [selectNewAddress, setSelectNewAddress] = useState("");
   const [selectedCardDetails, setSelectedCardDetails] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState(null);
   const [deliveryAddresses, setDeliveryAddresses] = useState([]);
   const [currentAddress, setCurrentAddress] = useState(null); // Stores the address being edited
   const [editIndex, setEditIndex] = useState(null); // Stores the index of the address being edited
-
+  
+  
   // Function to handle card selection
   const handleCardSelect = (card) => {
     setSelectedCardDetails(card); // Update the selected card details
@@ -55,24 +58,20 @@ function Dashboard() {
         ]);
       }, 2000)
     );
-  
+
   const resource = {
     read: async () => {
       const data = await fetchData();
       return data;
     },
   };
- 
-  
+
   useEffect(() => {
     // Simulate data fetching delay
     resource.read().then((data) => {
       setData(data);
-      
     });
-     
   }, []);
- 
 
   const stateData = [
     { value: "California", label: "California" },
@@ -80,7 +79,6 @@ function Dashboard() {
     { value: "Florida", label: "Florida" },
     { value: "New York", label: "New York" },
     { value: "Illinois", label: "Illinois" },
-  
   ];
   const cityData = [
     { value: "Los Angeles", label: "Los Angeles" },
@@ -88,7 +86,6 @@ function Dashboard() {
     { value: "San Diego", label: "San Diego" },
     { value: "Sacramento", label: "Sacramento" },
     { value: "Fresno", label: "Fresno" },
-  
   ];
   // Handler to update the selected state
   const handleSelectChange = (field, value) => {
@@ -102,72 +99,72 @@ function Dashboard() {
     setSelectCity(value);
   };
 
-  const handleChangeAddress=()=>{
+  const handleChangeAddress = () => {
+    setSelectNewAddress(true);
+    setIsDialogOpen(true);
+  };
 
-setSelectNewAddress(true)
-setIsDialogOpen(true)
+  //   const handleLocationChange = (newAddress) => {
+  //   // Add new address to the previous addresses list
+  //   setDeliveryAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+  //    console.log("Updated Location:", newAddress);
+  //    // Handle updated location in state or API calls
+  //  };
 
-  }
+  // Handle Edit Icon Click
+  const handleEditAddress = (index) => {
+    setCurrentAddress(deliveryAddresses[index]);
+    setEditIndex(index);
+    setIsDialogOpen(true); // Open the dialog for editing
+  };
 
-
-//   const handleLocationChange = (newAddress) => {
-//   // Add new address to the previous addresses list
-//   setDeliveryAddresses((prevAddresses) => [...prevAddresses, newAddress]);
-//    console.log("Updated Location:", newAddress);
-//    // Handle updated location in state or API calls
-//  };
-
- // Handle Edit Icon Click
- const handleEditAddress = (index) => {
-   setCurrentAddress(deliveryAddresses[index]);
-   setEditIndex(index);
-   setIsDialogOpen(true); // Open the dialog for editing
- };
-
- // Handle Delete Icon Click
- const handleDeleteAddress = (index) => {
-   const updatedAddresses = [...deliveryAddresses];
-   updatedAddresses.splice(index, 1);
-   setDeliveryAddresses(updatedAddresses);
- };
+  // Handle Delete Icon Click
+  const handleDeleteAddress = (index) => {
+    const updatedAddresses = [...deliveryAddresses];
+    updatedAddresses.splice(index, 1);
+    setDeliveryAddresses(updatedAddresses);
+  };
 
   // Save Address (for both Add and Edit)
   const handleLocationChange = (newAddress) => {
-   const updatedAddresses = [...deliveryAddresses];
+    const updatedAddresses = [...deliveryAddresses];
 
-   if (editIndex !== null) {
-     // Update existing address
-     updatedAddresses[editIndex] = newAddress;
-   } else {
-     // Add new address
-     updatedAddresses.push(newAddress);
-   }
+    if (editIndex !== null) {
+      // Update existing address
+      updatedAddresses[editIndex] = newAddress;
+    } else {
+      // Add new address
+      updatedAddresses.push(newAddress);
+    }
 
-   setDeliveryAddresses(updatedAddresses);
-   setCurrentAddress(null);
-   setEditIndex(null);
- };
- 
+    setDeliveryAddresses(updatedAddresses);
+    setCurrentAddress(null);
+    setEditIndex(null);
+  };
+
   return (
     <>
       <div className="flex items-center justify-center ml-4 mr-4">
-      {
-         data?  <TopWidgetCard data={data} onCardSelect={handleCardSelect} />: <TopWidgetCardSkeleton />
-      }
-      {/* <Suspense fallback={<TopWidgetCardSkeleton />}>
+        {data ? (
+          <TopWidgetCard data={data} onCardSelect={handleCardSelect} />
+        ) : (
+          <TopWidgetCardSkeleton />
+        )}
+        {/* <Suspense fallback={<TopWidgetCardSkeleton />}>
   <TopWidgetCard data={data} onCardSelect={handleCardSelect} />
 </Suspense> */}
-        
       </div>
-<div>
-<Link to={"new-card"}>
-   <Button className="mt-9 flex ">Add New Card</Button>
-   </Link>
-</div>
+      <div className="flex justify-end">
+        <Link to={"new-card"}>
+          <Button className="mt-9">
+          <Plus className="h-4 w-4" />
+          Add New Card</Button>
+        </Link>
+      </div>
       <section className="mt-6 overflow-hidden ">
         <h1 className="text-black text-xl font-semibold mb-2">CARD DETAILS</h1>
 
-        <Suspense fallback={<UserCardSkeleton/>}>
+        <Suspense fallback={<UserCardSkeleton />}>
           <div className="">
             {/* First Card */}
             <Card className="w-full shadow-md rounded-lg border">
@@ -251,7 +248,6 @@ setIsDialogOpen(true)
                   </div>
                 </form>
               </CardContent>
-             
             </Card>
 
             {/* Second Card */}
@@ -281,7 +277,7 @@ setIsDialogOpen(true)
                       type="text"
                       label={"Address Line 2"}
                       placeholder=" "
-                      required={true} 
+                      required={true}
                     />
                   </div>
 
@@ -345,10 +341,10 @@ setIsDialogOpen(true)
                   </div>
                   <div className="relative col-span-1 mb-6 mt-4">
                     <div onClick={handleChangeAddress}>
-                      <span  className="text-sm text-red-600 cursor-pointer">
+                      <span className="text-sm text-red-600 cursor-pointer">
                         Add New Address For Delivery
                       </span>
-                      </div>
+                    </div>
                   </div>
                 </form>
               </CardContent>
@@ -403,7 +399,6 @@ setIsDialogOpen(true)
                     options={cityData} // Options to populate the select field
                     required={true} // If required
                   />
-                 
 
                   {/* State Field */}
 
@@ -418,7 +413,6 @@ setIsDialogOpen(true)
                     options={stateData} // Options to populate the select field
                     required={true} // If required
                   />
-                  
 
                   <div className="relative col-span-1 mb-6">
                     <InputField
@@ -434,56 +428,85 @@ setIsDialogOpen(true)
               </CardContent>
             </Card>
 
-           {/* Render the list of Address Cards */}
-<div className="mt-4 flex flex-wrap gap-4 justify-start">
-  {deliveryAddresses.length > 0 ? (
-    deliveryAddresses.map((address, index) => (
-      <div key={index} className="flex items-center justify-center w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-        <Card key={index} className="cursor-pointer shadow-lg rounded-lg border-2 border-lightgray w-full">
-          <CardContent key={index} className="flex items-center p-4 h-auto min-h-[200px]">
-            <div className="flex flex-col w-full">
-              {/* Title Section with Icons */}
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-lg">Delivery Address {index + 1}</h3>
-                <div className="flex gap-4">
-                  <Edit 
-                    size={20} 
-                    className="cursor-pointer text-blue-500 hover:text-blue-700"
-                    onClick={() => handleEditAddress(index)} // handleEditAddress function
-                  />
-                  <Trash 
-                    size={20} 
-                    className="cursor-pointer text-red-500 hover:text-red-700"
-                    onClick={() => handleDeleteAddress(index)} // handleDeleteAddress function
-                  />
-                </div>
-              </div>
+            {/* Render the list of Address Cards */}
+            <div className="mt-4 flex flex-wrap gap-4 justify-start">
+              {deliveryAddresses.length > 0 ? (
+                deliveryAddresses.map((address, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center w-full sm:w-1/2 lg:w-1/3 xl:w-1/4"
+                  >
+                    <Card
+                      key={index}
+                      className="cursor-pointer shadow-lg rounded-lg border-2 border-lightgray w-full"
+                    >
+                      <CardContent
+                        key={index}
+                        className="flex items-center p-4 h-auto min-h-[200px]"
+                      >
+                        <div className="flex flex-col w-full">
+                          {/* Title Section with Icons */}
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-semibold text-lg">
+                              Delivery Address {index + 1}
+                            </h3>
+                            <div className="flex gap-4">
+                              <Edit
+                                size={20}
+                                className="cursor-pointer text-blue-500 hover:text-blue-700"
+                                onClick={() => handleEditAddress(index)} // handleEditAddress function
+                              />
+                              <Trash
+                                size={20}
+                                className="cursor-pointer text-red-500 hover:text-red-700"
+                                onClick={() => handleDeleteAddress(index)} // handleDeleteAddress function
+                              />
+                            </div>
+                          </div>
 
-              {/* Address Information */}
-              <p className="text-sm"><strong>Address Line 1:</strong> {address.addressLine1}</p>
-              <p className="text-sm"><strong>Address Line 2:</strong> {address.addressLine2}</p>
-              <p className="text-sm"><strong>Postal Code:</strong> {address.postalCode}</p>
-              <p className="text-sm"><strong>State:</strong> {address.state}</p>
-              <p className="text-sm"><strong>City:</strong> {address.city}</p>
+                          {/* Address Information */}
+                          <p className="text-sm">
+                            <strong>Address Line 1:</strong>{" "}
+                            {address.addressLine1}
+                          </p>
+                          <p className="text-sm">
+                            <strong>Address Line 2:</strong>{" "}
+                            {address.addressLine2}
+                          </p>
+                          <p className="text-sm">
+                            <strong>Postal Code:</strong> {address.postalCode}
+                          </p>
+                          <p className="text-sm">
+                            <strong>State:</strong> {address.state}
+                          </p>
+                          <p className="text-sm">
+                            <strong>City:</strong> {address.city}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-lg text-gray-500">
+                  No addresses added yet.
+                </p>
+              )}
             </div>
-          </CardContent>
-        </Card>
-      </div>
-    ))
-  ) : (
-    <p className="text-center text-lg text-gray-500">No addresses added yet.</p>
-  )}
-</div>
-
           </div>
         </Suspense>
       </section>
 
-      {
-         isDialogOpen? <AddNewAddress  onLocationChange={handleLocationChange}
+      {isDialogOpen ? (
+        <AddNewAddress
+          onLocationChange={handleLocationChange}
           showDialog={isDialogOpen}
-          setShowDialog={setIsDialogOpen} initialAddress={currentAddress} />:""
-      }
+          setShowDialog={setIsDialogOpen}
+          initialAddress={currentAddress}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }

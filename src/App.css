@@ -12,3 +12,9 @@
  .tippy-box[data-theme='custom'] .tippy-arrow {
    display: none;  /* Hide the arrow (pointer) */
  }
+
+ input:-webkit-autofill {
+   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important; /* Transparent background */
+   background-color: transparent !important; /* Ensure no background color */
+   color: inherit !important; /* Use the input's text color */
+ }

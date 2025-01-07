@@ -17,7 +17,7 @@ const Header = () => {
       <div className=" mx-[10px] mr-10 mt-3 flex justify-between items-center">
       
         <div className={` ${theme === 'dark' ? 'text-white text-2xl' : 'text-black text-2xl'}`}>
-          <Link to="dashboard">ITC Smart Card</Link>
+          <Link to="its-smart/dashboard">ITS Smart Card</Link>
         </div>
         <div className="flex gap-4">
         <Tooltip content={'Toggle Theme'} animation="scale" duration={250} theme={theme}

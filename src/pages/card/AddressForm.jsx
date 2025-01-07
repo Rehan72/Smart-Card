@@ -14,6 +14,7 @@ const AddressForm = ({
     register,
     setValue,
     clearErrors,
+    reset,
     formState: { errors },
   } = useFormContext();
   
@@ -55,6 +56,12 @@ const AddressForm = ({
       [stepKey]:  {}, // Initialize if undefined
     }));
   }, [stepKey, setFormValues]);
+   // Sync React Hook Form with formValues
+   useEffect(() => {
+      if (formValues?.[stepKey]) {
+        reset(formValues[stepKey]); // Reset form with step values
+      }
+    }, [formValues, stepKey, reset]);
 
   const renderError = (field) =>
     errors[field] && (

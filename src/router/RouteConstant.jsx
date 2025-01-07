@@ -1,7 +1,8 @@
 import AddNewCard from "../pages/card/AddNewCard";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
-import User from "../pages/User";
+import AddUser from "../pages/users/AddUser";
+import User from "../pages/users/User";
 import { preText } from "../utils/Constant";
 
 
@@ -20,6 +21,12 @@ export default [
    {
       element: User,
       path: `${routeParams}user`,
+     // permission: RoutePermission?.SYSTEM_ADMIN,
+      exact: true
+    },
+    {
+      element: AddUser,
+      path: `${routeParams}user/add-user`,
      // permission: RoutePermission?.SYSTEM_ADMIN,
       exact: true
     },
